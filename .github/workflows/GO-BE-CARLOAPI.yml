@@ -2,11 +2,11 @@ name: go-be-api-carlo
 on:
   workflow_dispatch:
     inputs:
-      logLevel:
+      releaseName:
         description: 'Release name'     
         required: true
         default: 'Sprint 1'
-      tags:
+      testrunName:
         description: 'Test run name'
         required: true
       runtype:
@@ -49,11 +49,11 @@ jobs:
         if: ${{ github.event.inputs.runtype == 'regression'}} 
         run: newman run "go-be-apicarlo.postman_collection.json" -e "go-be-apicarlo-qa.postman_environment.json" 
           -r cli,htmlextra,qase 
-          --reporter-htmlextra-export testResults/All/htmlreport.html 
+          --reporter-htmlextra-export testResults/htmlreport.html 
           --reporter-qase-logging 
           --reporter-qase-projectCode EDUC 
           --reporter-qase-apiToken ${{secrets.QASE_TOKEN}}
-          --reporter-qase-runName "${{github.event.inputs.logLevel}} - ${{github.event.inputs.tags}}"
+          --reporter-qase-runName "${{github.event.inputs.releaseName}} - ${{github.event.inputs.testrunName}}"
           --reporter-qase-rootSuiteTitle 'Go BE Regression'
           
     # Run the POSTMAN collection
@@ -68,7 +68,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with: 
-          name: "GO_BE_API_CARLO${{github.event.inputs.tags}}_reports"
+          name: "GO_BE_API_CARLO${{github.event.inputs.testrunName}}_reports"
           path: testResults
 
 
