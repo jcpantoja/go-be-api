@@ -1,0 +1,177 @@
+{
+	"info": {
+		"_postman_id": "767e1422-efa7-4e7c-8f92-1448649cc54e",
+		"name": "Cambridge G0 - Carlo Sample",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19306276"
+	},
+	"item": [
+		{
+			"name": "OpenSearch Endpoint - autocomplete - Update Response Data Format Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"  const jsonData = pm.response.json();\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200); \r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test('Name field exists for all objects in suggestions', function () {\r",
+							"    var dataObjects = jsonData.data[0].data;\r",
+							"    for (var i = 0; i < dataObjects.length; i++) {\r",
+							"      pm.test('Name field exists for object in suggestions ' + (i+1), function () {\r",
+							"        pm.expect(dataObjects[i].name).to.exists;\r",
+							"      });\r",
+							"    }\r",
+							"  });\r",
+							"\r",
+							"  pm.test('Name field exists for all objects in resources', function () {\r",
+							"    var dataObjects = jsonData.data[1].data;\r",
+							"    for (var i = 0; i < dataObjects.length; i++) {\r",
+							"      pm.test('Name field exists for object in resources ' + (i+1), function () {\r",
+							"        pm.expect(dataObjects[i].name).to.exists;\r",
+							"      });\r",
+							"    }\r",
+							"  });\r",
+							"\r",
+							"//   pm.test('Name field exists for all objects in did-you-mean', function () {\r",
+							"//     var dataObjects = jsonData.data[3].data;\r",
+							"//     for (var i = 0; i < dataObjects.length; i++) {\r",
+							"//       pm.test('Name field exists for object in did-you-mean ' + (i+1), function () {\r",
+							"//         pm.expect(dataObjects[i].name).to.exists;\r",
+							"       \r",
+							"//       });\r",
+							"//     }\r",
+							"//   });\r",
+							"  \r",
+							"\r",
+							"\r",
+							"  // Verify that the \"data\" field exists\r",
+							"  pm.test('data field exists', function () {\r",
+							"    pm.expect(jsonData.data).to.exist;\r",
+							"  });\r",
+							"\r",
+							"  // Verify that the \"name\" field is a string and not an array\r",
+							"  pm.test('Name field is a string and not an array', function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    console.log(jsonData)\r",
+							"   pm.expect(jsonData.data[0].data[0].name).to.be.a('string');\r",
+							"  });\r",
+							"\r",
+							"  // Verify that the \"thumbnail_url\" field exists\r",
+							" pm.test('resources, did-you-mean, and suggestions field should be changed to data field', function () {\r",
+							"    pm.expect(jsonData.data[0].data).to.exist;\r",
+							"    pm.expect(jsonData.data[1].data).to.exist;\r",
+							"    pm.expect(jsonData.data[2].data).to.exist;\r",
+							"  });\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}trials/autocomplete?query=English&is_trial=true",
+					"host": [
+						"{{URL}}trials"
+					],
+					"path": [
+						"autocomplete"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "English"
+						},
+						{
+							"key": "is_trial",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "OpenSearch Endpoint - autocomplete - Update Response Data Format - schema validation Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"data\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"items\": {\r",
+							"                \"type\": \"object\",\r",
+							"                \"properties\": {\r",
+							"                    \"type\": {\"type\": \"string\"},\r",
+							"                    \"data\": {\r",
+							"                        \"type\": \"array\",\r",
+							"                        \"items\": {\r",
+							"                            \"type\": \"object\",\r",
+							"                            \"properties\": {\r",
+							"                                \"id\": {\"type\": \"integer\"},\r",
+							"                                \"name\": {\"type\": \"string\"}\r",
+							"                            },\r",
+							"                            \"required\": [\"id\", \"name\"]\r",
+							"                        }\r",
+							"                    }\r",
+							"                },\r",
+							"                \"required\": [\"type\", \"data\"]\r",
+							"            }\r",
+							"        }\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Schema Validation - name field should be a string, not an array\", function () {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"\r",
+							"// Schema validation should be in other request"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}trials/autocomplete?query=Sciencesss&is_trial=true",
+					"host": [
+						"{{URL}}trials"
+					],
+					"path": [
+						"autocomplete"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "Sciencesss"
+						},
+						{
+							"key": "is_trial",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
