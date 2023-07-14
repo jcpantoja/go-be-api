@@ -49,7 +49,7 @@ jobs:
         if: ${{ github.event.inputs.runtype == 'regression'}} 
         run: newman run "go-be-apicarlo.postman_collection.json" -e "go-be-apicarlo-qa.postman_environment.json" 
           -r cli,htmlextra,qase 
-          --reporter-htmlextra-export testResults/htmlreport.html 
+          --reporter-htmlextra-export testResults/All/htmlreport.html 
           --reporter-qase-logging 
           --reporter-qase-projectCode EDUC 
           --reporter-qase-apiToken ${{secrets.QASE_TOKEN}}
