@@ -54,7 +54,7 @@ jobs:
           --reporter-qase-projectCode EDUC 
           --reporter-qase-apiToken ${{secrets.QASE_TOKEN}}
           --reporter-qase-runName "${{github.event.inputs.logLevel}} - ${{github.event.inputs.tags}}"
-          --reporter-qase-rootSuiteTitle 'GO BE Regression API Testing'
+          --reporter-qase-rootSuiteTitle 'Go BE Regression'
           
     # Run the POSTMAN collection
       - name: test workflow
